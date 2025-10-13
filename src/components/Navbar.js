@@ -12,7 +12,9 @@ function Navbar({ onOpenModal }){
           <Image className="nav__img" src={logo} alt="logo" />
         </figure>
         <ul className="nav__list--wrapper">
-         <Register onOpenModal={onOpenModal} />
+          <li onClick={onOpenModal}>
+      login
+    </li>
           <li className="nav__list nav__list--mobile">About</li>
           <li className="nav__list nav__list--mobile">Contact</li>
           <li className="nav__list nav__list--mobile">Help</li>

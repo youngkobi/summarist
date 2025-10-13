@@ -9,9 +9,7 @@ import Modal from "./Modal";
 export default function Register({ onOpenModal })  {
     return (
         <>
-  <li onClick={onOpenModal}>
-      login
-    </li>
+
     </>
   );
 }
