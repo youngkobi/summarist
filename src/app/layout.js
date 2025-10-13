@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "../components/Navbar";
+import Modal from "@/components/Modal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,11 +20,18 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleCloseModal = () => setIsModalOpen(false);
+  const handleOpenModal = () => setIsModalOpen(true);
+  
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <Navbar onOpenModal={handleOpenModal} />
+        <Modal isOpen={isModalOpen} onClose={handleCloseModal}/>
         {children}
       </body>
     </html>
   );
 }
+
