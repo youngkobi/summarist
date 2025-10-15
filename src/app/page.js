@@ -6,13 +6,13 @@ import Reviews from "@/components/Reviews";
 import Numbers from "@/components/Numbers";
 import Footer from "@/components/Footer";
 
-export default function Home() {
+export default function Home({onOpenModal}) {
   return (
     <div>
 
-      <Landing/>
+      <Landing onOpenModal={onOpenModal}/>
       <Features/>
-      <Reviews/>
+      <Reviews onOpenModal={onOpenModal}/>
       <Numbers/>
       <Footer/>
     </div>

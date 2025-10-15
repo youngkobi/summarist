@@ -3,6 +3,7 @@
 import Modal from '@/components/Modal';
 import Navbar from '@/components/Navbar';
 import { useState } from 'react';
+import Home from './page';
 
 
 
@@ -14,6 +15,7 @@ export default function AppWrapper({ children }) {
     <>
     <Navbar onOpenModal={handleOpenModal} />
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}/>
+        <Home onOpenModal={handleOpenModal}/>
       
         {children}
       </>

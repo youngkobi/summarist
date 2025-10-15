@@ -1,7 +1,7 @@
 import { BsStarFill } from "react-icons/bs";
 
 
-function Reviews(){
+function Reviews({onOpenModal}){
     return(
          <section id="reviews">
       <div className="row">
@@ -80,7 +80,7 @@ function Reviews(){
             </div>
           </div>
           <div className="reviews__btn--wrapper">
-            <button className="btn home__cta--btn">Login</button>
+            <button onClick={onOpenModal} className="btn home__cta--btn">Login</button>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { auth } from "../../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from 'next/navigation';
 
 
@@ -13,13 +13,20 @@ function Modal({ isOpen, onClose, children }) {
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  function register() {
+  function register(e) {
     e.preventDefault();
     console.log("works");
     createUserWithEmailAndPassword(auth, email, password)
       .then((user) => {
-        // Signed up
-        console.log(user);
+      const isSuccess = true; 
+             if (isSuccess) {
+      // Redirect to the dashboard on successful login
+      onClose();
+     router.push('/foryou'); 
+    } else {
+      // Handle login failure
+      alert('Login failed!');
+    }
 
         // ...
       })
@@ -29,14 +36,14 @@ function Modal({ isOpen, onClose, children }) {
         console.log(errorMessage);
       });
   }
-  function login() {
+  function login(e) {
     e.preventDefault();
       signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
           const isSuccess = true; 
-           console.log("Submitting form with", { email, password });
              if (isSuccess) {
       // Redirect to the dashboard on successful login
+      onClose();
      router.push('/foryou'); 
     } else {
       // Handle login failure

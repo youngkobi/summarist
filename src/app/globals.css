@@ -706,3 +706,7 @@ MODAL STYLING
 .no-cursor{
     cursor: not-allowed;
 }
+
+.pointer{
+    cursor: pointer;
+}
