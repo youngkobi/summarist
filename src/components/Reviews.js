@@ -1,7 +1,10 @@
+"use client"
 import { BsStarFill } from "react-icons/bs";
+import { useModal } from "./ModalContext";
 
 
-function Reviews({onOpenModal}){
+function Reviews(){
+  const { openModal } = useModal();
     return(
          <section id="reviews">
       <div className="row">
@@ -80,7 +83,7 @@ function Reviews({onOpenModal}){
             </div>
           </div>
           <div className="reviews__btn--wrapper">
-            <button onClick={onOpenModal} className="btn home__cta--btn">Login</button>
+            <button onClick={openModal} className="btn home__cta--btn">Login</button>
           </div>
         </div>
       </div>

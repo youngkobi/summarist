@@ -1,9 +1,12 @@
+"use client"
 import landing from "@/assets/landing.png"
 import Image from 'next/image';
+import { useModal } from "./ModalContext";
 
 
 
-function Landing({ onOpenModal }){
+function Landing({  }){
+    const { openModal } = useModal();
     return(
     <section id="landing">
       <div className="container">
@@ -21,7 +24,7 @@ function Landing({ onOpenModal }){
                 <br className="remove--tablet" />
                 and even people who don’t like to read.
               </div>
-              <button onClick={onOpenModal} className="btn home__cta--btn">Login</button>
+              <button onClick={openModal} className="btn home__cta--btn">Login</button>
             </div>
             <figure className="landing__image--mask">
               <Image src={landing} alt="landing" />

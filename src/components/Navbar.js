@@ -1,8 +1,13 @@
+"use client"
+
+
 import logo from "@/assets/logo.png";
 import Image from "next/image";
-import Register from "./Register";
+import { useModal } from "./ModalContext";
 
-function Navbar({ onOpenModal }) {
+
+function Navbar() {
+  const { openModal } = useModal();
   return (
     <nav className="nav">
       <div className="nav__wrapper">
@@ -10,7 +15,7 @@ function Navbar({ onOpenModal }) {
           <Image className="nav__img" src={logo} alt="logo" />
         </figure>
         <ul className="nav__list--wrapper">
-          <li onClick={onOpenModal} className="pointer">Login</li>
+          <li onClick={openModal} className="pointer">Login</li>
           <li className="nav__list nav__list--mobile">About</li>
           <li className="nav__list nav__list--mobile">Contact</li>
           <li className="nav__list nav__list--mobile">Help</li>
