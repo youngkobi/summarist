@@ -13,7 +13,7 @@ export default function Home({onOpenModal}) {
   return (
     <div>
       <Navbar/>
-      <Modal/>
+      <Modal redirectOnLogin={true}/>
       <Landing onOpenModal={onOpenModal}/>
       <Features/>
       <Reviews onOpenModal={onOpenModal}/>

@@ -9,7 +9,7 @@ import { auth } from "../../firebase";
 import { useRouter } from "next/navigation";
 import { useModal } from "./ModalContext";
 
-function Modal({ children }) {
+function Modal({ children, redirectOnLogin = false }) {
   const { isModalOpen, closeModal } = useModal();
 
   const [noAccount, setNoAccount] = useState(false);
@@ -21,11 +21,17 @@ function Modal({ children }) {
 
   if (!isModalOpen) return null;
 
+   function handleLoginSuccess() {
+    closeModal();
+    if (redirectOnLogin) {
+      router.push("/foryou");
+    }
+  }
+
   function guestLogin() {
     signInAnonymously(auth)
       .then(() => {
-        closeModal();
-        router.push("/foryou");
+      handleLoginSuccess()
       })
       .catch((error) => {
         console.error("Guest login failed:", error.message);
@@ -49,8 +55,7 @@ function Modal({ children }) {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
-        closeModal();
-        router.push("/foryou");
+       handleLoginSuccess()
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
@@ -74,8 +79,7 @@ function Modal({ children }) {
 
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        closeModal();
-        router.push("/foryou");
+       handleLoginSuccess()
       })
       .catch((error) => {
         if (error.code === "auth/user-not-found") {

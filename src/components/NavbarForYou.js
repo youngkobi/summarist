@@ -1,6 +1,3 @@
-import logo from "@/assets/logo.png";
-import Image from "next/image";
-import Register from "./Register";
 
 function NavbarForYou({ onOpenModal }) {
   return (

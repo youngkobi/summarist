@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import AudioDurationRecs from "./AudioDurationRecs";
 
 export default function SuggestedBooks() {
   const [books, setBooks] = useState([]);
@@ -16,7 +17,6 @@ export default function SuggestedBooks() {
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error("Failed to fetch data");
         const data = await res.json();
-        console.log(data);
 
         const mappedData = (data.results || data.items || data)
           .slice(0, 5)
@@ -33,6 +33,7 @@ export default function SuggestedBooks() {
             duration: item.duration || "03:24",
             rating: item.averageRating || "4.4",
             subscriptionRequired: item.subscriptionRequired || false, // <-- Include this
+            audioLink: item.audioLink || "",
           }));
 
         setBooks(mappedData);
@@ -72,7 +73,8 @@ export default function SuggestedBooks() {
             <p className="rfy-book-author">{book.author}</p>
             <p className="rfy-book-desc">{book.description}</p>
             <div className="rfy-book-meta">
-              <span>{book.duration}</span>
+             <AudioDurationRecs audioLink={book.audioLink} />
+
               <span>⭐ {book.rating}</span>
             </div>
           </div>

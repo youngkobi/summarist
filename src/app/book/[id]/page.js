@@ -1,3 +1,7 @@
+import AudioDurationRecs from '@/components/AudioDurationRecs';
+import Modal from '@/components/Modal';
+import ReadListenButtons from '@/components/ReadListenButtons';
+import SaveToLibraryButton from '@/components/SaveToLibraryFun';
 import Sidebar from '@/components/sidebar';
 import React from 'react';
 import { FaBookOpen, FaMicrophone, FaBookmark } from 'react-icons/fa';
@@ -14,14 +18,20 @@ async function getBook(id) {
   return {
     id: data.id || id,
     title: data.title || 'Untitled',
+    subtitle: data.subTitle || 'Untitled',
     author: data.author || 'Unknown Author',
-    description: data.subTitle || 'No description available.',
+    description: data.bookDescription || 'No description available.',
     image: data.imageLink || 'https://via.placeholder.com/150x220?text=No+Image',
     duration: data.duration || '03:24',
     rating: data.averageRating || '4.4',
+    tRating: data.totalRating || '4.4',
     subscriptionRequired: data.subscriptionRequired || false,
     keyIdeas: data.keyIdeas || 0,
-    categories: data.categories || [],
+    categories: data.tags,
+    authordesc: data.authorDescription,
+    type: data.type,
+    summary: data.summary,
+    audioLink: data.audioLink || "",
   };
 }
 
@@ -32,10 +42,14 @@ export default async function BookDetailsPage({ params }) {
   if (!book) {
     return <div className="bookdetails-page__container">Book not found.</div>;
   }
+  console.log(book);
+  
+  
 
   return (
     <div className="bookdetails-page__container">
       <Sidebar />
+      <Modal/>
 
       <div className="search-bar-wrapper">
         <div className="search-container">
@@ -50,20 +64,21 @@ export default async function BookDetailsPage({ params }) {
         <div className="bookdetails-page__header-left">
           <h1 className="bookdetails-page__title">{book.title}</h1>
           <p className="bookdetails-page__author">{book.author}</p>
-          <p className="bookdetails-page__subtitle">{book.description}</p>
+          <p className="bookdetails-page__subtitle">{book.subtitle}</p>
 
           <div className="bookdetails-page__stats">
             <div className="bookdetails-page__stats-column">
               <div className="bookdetails-page__stat-item">
-                ⭐ {book.rating} ({book.rating ? `${book.rating} ratings` : 'No ratings'})
+                ⭐ {book.rating} ({book.tRating ? `${book.tRating} ratings` : 'No ratings'})
               </div>
               <div className="bookdetails-page__stat-item">
-                🎧 Audio & Text
+                🎧 {book.type}
               </div>
             </div>
             <div className="bookdetails-page__stats-column">
               <div className="bookdetails-page__stat-item">
-                ⏱ {book.duration}
+                ⏱              <AudioDurationRecs audioLink={book.audioLink} />
+
               </div>
               <div className="bookdetails-page__stat-item">
                 💡 {book.keyIdeas} Key ideas
@@ -73,18 +88,10 @@ export default async function BookDetailsPage({ params }) {
 
           <div className="content-divider" />
 
-          <div className="bookdetails-page__actions">
-            <button className="bookdetails-page__btn bookdetails-page__btn--primary">
-              <FaBookOpen size={18} /> Read
-            </button>
-            <button className="bookdetails-page__btn bookdetails-page__btn--primary">
-              <FaMicrophone size={18} /> Listen
-            </button>
-          </div>
+         <ReadListenButtons bookId={book.id}
+         subscriptionRequired={book.subscriptionRequired}/>
 
-          <button className="bookdetails-page__add-library-btn">
-            <FaBookmark size={18} /> Saved in My Library
-          </button>
+         <SaveToLibraryButton book={book}/>
         </div>
 
         <div className="bookdetails-page__header-right">
@@ -95,6 +102,22 @@ export default async function BookDetailsPage({ params }) {
           />
         </div>
       </div>
+
+<div className="bookdetails-page__info-section">
+  <h2>What's it about?</h2>
+  <div className="bookdetails-page__tags">
+    <span className="bookdetails-page__tag">{book.categories[1]}</span>
+    <span className="bookdetails-page__tag">{book.categories[0]}</span>
+  </div>
+  <p>
+    {book.description}
+  </p>
+
+  <h3>About the author</h3>
+  <p>
+{book.authordesc}  </p>
+</div>
+
     </div>
   );
 }
