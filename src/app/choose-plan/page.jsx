@@ -8,7 +8,7 @@ import SalesFooter from "@/components/SalesFooter";
 
 export default function Home() {
   const pricingRef = useRef(null);     // Marker at bottom of pricing section
-  const stopStickyRef = useRef(null);  // Marker before FAQ/Footer
+  const [activePlan, setActivePlan] = useState(null); // Track the active plan
 
   const [hasScrolledPastPricing, setHasScrolledPastPricing] = useState(false);
   const [hasReachedStopMarker, setHasReachedStopMarker] = useState(false);
@@ -17,40 +17,45 @@ export default function Home() {
   const isStuck = hasScrolledPastPricing && !hasReachedStopMarker;
 
   useEffect(() => {
-  const pricingObserver = new IntersectionObserver(
-    ([entry]) => {
-      // When top of pricing section is above the viewport top (i.e. scrolled past),
-      // boundingClientRect.top will be negative
-      if (entry.boundingClientRect.top <= 0) {
-        setHasScrolledPastPricing(true);
-      } else {
-        setHasScrolledPastPricing(false);
+    const pricingObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.boundingClientRect.top <= 0) {
+          setHasScrolledPastPricing(true);
+        } else {
+          setHasScrolledPastPricing(false);
+        }
+      },
+      {
+        threshold: 0,
+        rootMargin: '0px 0px 0px 0px', // Observe relative to viewport top
       }
-    },
-    {
-      threshold: 0,
-      rootMargin: '0px 0px 0px 0px', // Observe relative to viewport top
-    }
-  );
+    );
 
-  const stopObserver = new IntersectionObserver(
-    ([entry]) => {
-      setHasReachedStopMarker(entry.isIntersecting);
-    },
-    {
-      threshold: 0,
-    }
-  );
 
-  if (pricingRef.current) pricingObserver.observe(pricingRef.current);
-  if (stopStickyRef.current) stopObserver.observe(stopStickyRef.current);
+    if (pricingRef.current) pricingObserver.observe(pricingRef.current);
 
-  return () => {
-    if (pricingRef.current) pricingObserver.unobserve(pricingRef.current);
-    if (stopStickyRef.current) stopObserver.unobserve(stopStickyRef.current);
+
+    return () => {
+      if (pricingRef.current) pricingObserver.unobserve(pricingRef.current);
+    };
+  }, []);
+
+  const pricingOptions = [
+    { label: "Premium Plus Yearly", price: "$99.99/year", trial: "7-day free trial included" },
+    { label: "Premium Monthly", price: "$9.99/month", trial: "No trial included" },
+  ];
+
+  const handleActive = (index) => {
+    setActivePlan(index); // Set the clicked item as active
   };
-}, []);
 
+  // Determine the CTA button text based on the active plan
+  const getCtaButtonText = () => {
+    if (activePlan === 0) {
+      return 'Start your free 7-day trial'; // For "Premium Plus Yearly"
+    }
+    return 'Start your first month'; // Default text for other plans
+  };
 
   return (
     <div className="final_container-header">
@@ -77,10 +82,11 @@ export default function Home() {
           </div>
           <div className="choose-plan-feature-item">
             <div className="choose-plan-icon">🌱</div>
-            <div className="choose-plan-feature-title">3 million</div>
-            <div className="choose-plan-feature-subtext">
-              people growing with Summarist everyday
-            </div>
+            <div className="choose-plan-feature-middlesub"> 
+              <span className="choose-plan-feature-title"> 
+              3 million  
+              </span> people growing with Summarist everyday</div>
+      
           </div>
           <div className="choose-plan-feature-item">
             <div className="choose-plan-icon">🤝</div>
@@ -92,34 +98,49 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Pricing Section */}
+      {/* Pricing Section with ref */}
       <div className="choose-plan-pricing-section" ref={pricingRef}>
-        <h2 className="pricing-title">Choose the plan that fits you </h2>
+        <h2 className="pricing-title">Choose the plan that fits you</h2>
 
-        <div className="pricing-option selected">
-          <input type="radio" id="yearly" name="plan" defaultChecked />
-          <label htmlFor="yearly">
-            <strong>Premium Plus Yearly</strong>
-            <div className="price">$99.99/year</div>
-            <div className="trial">7-day free trial included</div>
-          </label>
-        </div>
+        {pricingOptions.map((option, index) => (
+          <div key={index}>
+            {/* Pricing Option */}
+            <div
+              className={`pricing-option ${activePlan === index ? "active" : ""}`}
+              onClick={() => handleActive(index)} // Set the clicked option as active
+            >
+              <input
+                type="radio"
+                id={`plan-${index}`}
+                name="plan"
+                checked={activePlan === index}
+                onChange={() => handleActive(index)} // Optional: to handle radio input change
+              />
+              <label htmlFor={`plan-${index}`}>
+                <div className="circle"></div> {/* Circle div */}
+                <strong>{option.label}</strong>
+                <div className="price">{option.price}</div>
+                <div className="trial">{option.trial}</div>
+              </label>
+            </div>
 
-        <div className="pricing-option">
-          <input type="radio" id="monthly" name="plan" />
-          <label htmlFor="monthly">
-            <strong>Premium Monthly</strong>
-            <div className="price">$9.99/month</div>
-            <div className="trial">No trial included</div>
-          </label>
-        </div>
+            {/* Gray Bar and OR separator between the options */}
+            {index === 0 && (
+              <div className="grey-bar-container">
+                <div className="grey-bar"></div>
+                <span className="or-text">OR</span>
+                <div className="grey-bar"></div>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
 
       {/* Sticky or Static CTA */}
       {isStuck ? (
         <div className="sticky-cta stuck">
           <button className="choose-plan-cta-button">
-            Start your free 7-day trial
+            {getCtaButtonText()} {/* Dynamic button text */}
           </button>
           <p className="trial-message">
             Cancel your trial at any time before it ends, and you won’t be charged.
@@ -128,17 +149,13 @@ export default function Home() {
       ) : (
         <div className="static-cta">
           <button className="choose-plan-cta-button">
-            Start your free 7-day trial
+            {getCtaButtonText()} {/* Dynamic button text */}
           </button>
           <p className="trial-message">
             Cancel your trial at any time before it ends, and you won’t be charged.
           </p>
         </div>
       )}
-
-      {/* Marker to stop sticky behavior before FAQ */}
-      <div ref={stopStickyRef} style={{ height: "1px" }} />
-
       {/* FAQ and Footer */}
       <FaqSalespage />
       <SalesFooter />
