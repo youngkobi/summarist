@@ -12,12 +12,7 @@ const page = () => {
       <Sidebar />
       <Modal/>
       <div className="main-content__foryou">
-        <div className="top-bar">
-          <div className="search-container">
-            <input type="text" placeholder="Search for books" />
-            <button className="search-btn">🔍</button>
-          </div>
-        </div>
+       <NavbarForYou/>
         <div className="page-foryou">
           <div className="gray-bar-container">
             <div className="gray-bar"></div>

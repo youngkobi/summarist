@@ -6,7 +6,6 @@ import AudioDurationRecs from "./AudioDurationRecs";
 
 export default function RecommendedForYou() {
   const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -48,7 +47,6 @@ export default function RecommendedForYou() {
     fetchBooks();
   }, []);
 
-  if (loading) return <p className="rfy-loading">Loading recommendations...</p>;
   if (error) return <p className="rfy-error">Error: {error}</p>;
 
   return (

@@ -1,5 +1,6 @@
 import AudioDurationRecs from '@/components/AudioDurationRecs';
 import Modal from '@/components/Modal';
+import NavbarForYou from '@/components/NavbarForYou';
 import ReadListenButtons from '@/components/ReadListenButtons';
 import SaveToLibraryButton from '@/components/SaveToLibraryFun';
 import Sidebar from '@/components/sidebar';
@@ -42,7 +43,6 @@ export default async function BookDetailsPage({ params }) {
   if (!book) {
     return <div className="bookdetails-page__container">Book not found.</div>;
   }
-  console.log(book);
   
   
 
@@ -51,12 +51,7 @@ export default async function BookDetailsPage({ params }) {
       <Sidebar />
       <Modal/>
 
-      <div className="search-bar-wrapper">
-        <div className="search-container">
-          <input type="text" placeholder="Search for books" />
-          <button className="search-btn">🔍</button>
-        </div>
-      </div>
+     <NavbarForYou/>
 
       <div className="content-divider" />
 

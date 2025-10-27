@@ -1,5 +1,6 @@
 import AudioPlayer from "@/components/Audioplayer";
 import Modal from "@/components/Modal";
+import NavbarForYou from "@/components/NavbarForYou";
 import Sidebar from "@/components/sidebar";
 import React from "react";
 
@@ -32,13 +33,8 @@ const BookSummaryPage = async ({ params }) => {
   }
 
   return (
-    <div>
-      <div className="search-bar-wrapper">
-        <div className="search-container">
-          <input type="text" placeholder="Search for books" />
-          <button className="search-btn">🔍</button>
-        </div>
-      </div>
+    <div className="outside__player-container">
+     <NavbarForYou/>
       <div className="content-divider" />
       <div className="book-summary__container">
         <Sidebar />
