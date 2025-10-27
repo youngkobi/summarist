@@ -7,6 +7,7 @@ import { auth, db } from "../../../firebase";
 import Sidebar from "@/components/sidebar";
 import Modal from "@/components/Modal";
 import NavbarForYou from "@/components/NavbarForYou";
+import { useRouter } from "next/navigation"; // ✅ not next/router
 
 
 export default function SettingsPage() {
@@ -14,7 +15,7 @@ export default function SettingsPage() {
   const [userEmail, setUserEmail] = useState("");
   const [subscriptionPlan, setSubscriptionPlan] = useState("Loading...");
 
-
+ const router = useRouter()
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setIsLoggedIn(!!user);
@@ -48,8 +49,7 @@ export default function SettingsPage() {
   }, [auth, db]);
 
   const handleUpgrade = async () => {
-    // TODO: integrate your Stripe Checkout function here
- alert('has not been integrated')
+      router.push("/choose-plan");
   };
 
   return (
